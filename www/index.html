@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: content: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="keys.js"></script>
+  <script>
+    // NCMB アクセスの準備
+    let ncmb = new NCMB(appKey, clientKey);
+    // 本アプリで使うクラスの指定。const は定数の宣言。変更できない変数と思えば良い。
+    const db = "reortone";
+
+    function fetchAll() {
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass.order("name", false).fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
+    function searchekimei(){
+        let TestDataClass = ncmb.DataStore(db);
+        let ekimei = $("#ekimei").val();
+        TestDataClass.equalTo("ekimei", ekimei).fetchAll()
+        .then(function(results){
+            showResults(results);
+        })
+    }
+
+    function searchprice(){
+        let TestDataClass = ncmb.DataStore(db);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        let price = parseInt($("#price").val());
+        TestDataClass.equalTo("price", price).fetchAll()
+        .then(function(results){
+            showResults(results);
+        })
+    }
+    
+    function searchpriceLT() {
+        let price = parseInt($("#price").val());
+        let TestDataClass = ncmb.DataStore(db);
+        TestDataClass.lessThan("price", price).fetchAll()
+        .then(function(results) {
+            showResults(results);
+        })
+    }
+
+    function searchpriceGT() {
+        let price = parseInt($("#price").val(), 10);
+        let TestDataClass = ncmb.DataStore(db);
+        TestDataClass.greaterThan("price", price).fetchAll()
+        .then(function(results) {
+            showResults(results);
+        })
+    }
+
+    function showResults(results) {
+      // テーブルのヘッダを生成
+      let msg = "<table><tr><th>distance</th><th>ekimei</th><th>price</th><th>";
+      for (let i = 0; i < results.length; i++) {
+        // 各データを収めた表の列を生成
+        msg += "<tr>";
+        msg += "<td>" + results[i].distance + "</td>";
+        msg += "<td class='num'>" + results[i].ekimei + "</td>";
+        msg += "<td class='num'>" + results[i].price + "</td>";
+        msg += "</tr>";
+      }
+      // テーブルのテイラを生成
+      msg += "</table>";
+      $("#message").html(msg);
+    }
+  </script>
+</head>
+
+<body>
+  <h1>mBaaS search</h1>
+  <div>
+    <label for="ekimei">ekimei:</label>
+    <input id="ekimei" type="text" placeholder="ekimei">
+  </div>
+  <div>
+    <label for="price">price:</label>
+    <input id="price" type="number" placeholder="price">
+  </div>
+  <div id="button">
+    <button class="btn" onclick="fetchAll()">Fetch All</button>
+    <button class="btn" onclick="searchekimei()">ekimei</button>
+    <br>
+    <button class="btn" onclick="searchpriceLT()">price &lt</button>
+    <button class="btn" onclick="searchprice()">price</button>
+    <button class="btn" onclick="searchpriceGT()">price &gt</button>
+  </div>
+  <div id="message">message area</div>
+</body>
+
+</html>
